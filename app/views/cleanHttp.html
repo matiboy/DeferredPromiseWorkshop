@@ -1,0 +1,16 @@
+<h2>List of channels</h2>
+<h3>{{channels}}</h3>
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Title</th>
+			<th>Number</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="channel in channels">
+			<td>{{channel.title}}</td>
+			<td>{{channel.channel_number}}</td>
+		</tr>
+	</tbody>
+</table>

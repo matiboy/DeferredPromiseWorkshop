@@ -7,6 +7,10 @@ angular.module('deferredApp', [])
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
+      .when('/cleanHttp', {
+        templateUrl: 'views/cleanHttp.html',
+        controller: 'CleanHttpCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
