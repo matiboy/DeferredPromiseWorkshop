@@ -2,36 +2,28 @@
 
 angular.module('deferredApp')
 	.controller('SingleDeferredCtrl', function ($scope, $q, $http) {
-		// $http uses the promise API
-		var httpPromise = $http.get('http://angularjs.com');
-		httpPromise.then(function(fullResponse){
-			console.debug(fullResponse);
-		}, function(error){
-			console.error(error);
-		});
-		var wrongUrlPromise = $http.get('http://angularjs.pt');
-		wrongUrlPromise.then(function(fullResponse){
-			console.debug(fullResponse);
-		}, function(error){
-			console.error(error);
-		});
-
-		// Manually creating a deferred object
+		// Resolving only accepts a single value
 		var manualDefer = $q.defer();
-		manualDefer.promise.then(function(resolvedWith){
-			console.debug(resolvedWith);
-		}, function(rejectedWith) {
-			console.error(rejectedWith);
+		manualDefer.promise.then(function(resolvedWith, moreInfo){
+			console.debug(resolvedWith, moreInfo);
+		}, function() {
 		});
-		// Resolve the object
-		manualDefer.resolve('Everything s fine');
+		// Resolving only accepts a single value
+		manualDefer.resolve('I can only resolve with one value', 'Not 2');
 
-		// Manually creating a deferred object
-		var soonToBeRejectedDefer = $q.defer();
-		soonToBeRejectedDefer.promise.then(function(resolvedWith){
+		// Of course, that value could be an array
+		var passingMoreInfo = $q.defer();
+		passingMoreInfo.promise.then(function(resolvedWith){
 			console.debug(resolvedWith);
-		}, function(rejectedWith) {
-			console.error(rejectedWith);
+		}, function() {
 		});
-		soonToBeRejectedDefer.reject('Oops something went wrong');
+		passingMoreInfo.resolve(['There', 'you', 'go']);
+
+		// Or anything else
+		var resolvingWithACallback = $q.defer();
+		resolvingWithACallback.promise.then(function(cb){
+			cb();
+		}, function() {
+		});
+		resolvingWithACallback.resolve(angular.bind(console, console.log, 'Hi!'));
 	});
