@@ -1,21 +1,7 @@
 'use strict';
 
 angular.module('deferredApp')
-	.controller('SingleDeferredCtrl', function ($scope, $q, $http) {
-		// $http uses the promise API
-		var httpPromise = $http.get('http://angularjs.com');
-		httpPromise.then(function(fullResponse){
-			console.debug(fullResponse);
-		}, function(error){
-			console.error(error);
-		});
-		var wrongUrlPromise = $http.get('http://angularjs.pt');
-		wrongUrlPromise.then(function(fullResponse){
-			console.debug(fullResponse);
-		}, function(error){
-			console.error(error);
-		});
-
+	.controller('SingleDeferredCtrl', function ($scope, $q, $http, $timeout) {
 		// Manually creating a deferred object
 		var manualDefer = $q.defer();
 		manualDefer.promise.then(function(resolvedWith){
@@ -23,15 +9,39 @@ angular.module('deferredApp')
 		}, function(rejectedWith) {
 			console.error(rejectedWith);
 		});
-		// Resolve the object
+		// Resolving / Rejecting is a one time thing
 		manualDefer.resolve('Everything s fine');
+		// Therefore this will not do anything
+		manualDefer.reject('Too late...');
+		// Neither will this
+		manualDefer.resolve('Too late too');
 
-		// Manually creating a deferred object
-		var soonToBeRejectedDefer = $q.defer();
-		soonToBeRejectedDefer.promise.then(function(resolvedWith){
-			console.debug(resolvedWith);
-		}, function(rejectedWith) {
-			console.error(rejectedWith);
+		// .then function can be called several times to add several callbacks to the promise's queue
+		var anotherDefer = $q.defer();
+		anotherDefer.promise.then(function(resolvedWith){
+			console.debug('First', resolvedWith);
+		}, function(){
+
 		});
-		soonToBeRejectedDefer.reject('Oops something went wrong');
+		anotherDefer.promise.then(function(resolvedWith){
+			console.debug('Second', resolvedWith);
+		}, function(){
+
+		});
+		anotherDefer.resolve('then function');
+
+		// .then function can be added _after_ deferred object is resolved, and still be triggered
+		var lateBloomingDefer = $q.defer();
+		// Resolve immediately
+		lateBloomingDefer.resolve('I m already resolved');
+		lateBloomingDefer.promise.then(function(resolvedWith){
+			console.debug(resolvedWith);
+		}, function(){
+
+		});
+		$timeout(function() {
+			lateBloomingDefer.promise.then(function(resolvedWith){
+				console.debug("It's never too late with promises", resolvedWith);
+			})
+		}, 10000);
 	});
