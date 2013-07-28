@@ -2,36 +2,48 @@
 
 angular.module('deferredApp')
 	.controller('SingleDeferredCtrl', function ($scope, $q, $http) {
-		// $http uses the promise API
-		var httpPromise = $http.get('http://angularjs.com');
-		httpPromise.then(function(fullResponse){
-			console.debug(fullResponse);
-		}, function(error){
-			console.error(error);
-		});
-		var wrongUrlPromise = $http.get('http://angularjs.pt');
-		wrongUrlPromise.then(function(fullResponse){
-			console.debug(fullResponse);
-		}, function(error){
-			console.error(error);
-		});
-
-		// Manually creating a deferred object
+		// 2 more things
+		// .always - Not available in 1.1.2
 		var manualDefer = $q.defer();
 		manualDefer.promise.then(function(resolvedWith){
 			console.debug(resolvedWith);
 		}, function(rejectedWith) {
 			console.error(rejectedWith);
 		});
+
+		manualDefer.promise.always(function(value){
+			console.log('Whether rejected or resolved... but without value', value);
+		});
 		// Resolve the object
 		manualDefer.resolve('Everything s fine');
 
-		// Manually creating a deferred object
-		var soonToBeRejectedDefer = $q.defer();
-		soonToBeRejectedDefer.promise.then(function(resolvedWith){
+		// .always on reject
+		var rejectedDefer = $q.defer();
+		rejectedDefer.promise.then(function(resolvedWith){
 			console.debug(resolvedWith);
 		}, function(rejectedWith) {
 			console.error(rejectedWith);
 		});
-		soonToBeRejectedDefer.reject('Oops something went wrong');
+
+		rejectedDefer.promise.always(function(value){
+			console.log('Whether rejected or resolved... but without value', value);
+		});
+		// Resolve the object
+		rejectedDefer.reject('Reject');
+
+
+
+		// Promises in the template
+		var visibleDefer = $q.defer();
+		
+		visibleDefer.resolve("I'm a promise that gets displayed!");
+
+		$scope.message = visibleDefer.promise;
+
+		// Promises in the template
+		var rejectedVisibleDefer = $q.defer();
+		
+		rejectedVisibleDefer.reject('What will happen to me?');
+
+		$scope.rejectedMessage = rejectedVisibleDefer.promise;
 	});
