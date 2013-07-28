@@ -7,6 +7,10 @@ angular.module('deferredApp', [])
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
+      .when('/videoPlayer', {
+        templateUrl: 'views/videoPlayer.html',
+        controller: 'VideoPlayerCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
