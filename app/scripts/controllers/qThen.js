@@ -4,7 +4,6 @@ angular.module('deferredApp')
 	.controller('QThenCtrl', function ($scope, $q, $http) {
 		// $http returns a promise
 		var httpPromise = $http.get('http://randomthings.blob');
-		// var httpPromise = $http.get('http://maps.googleapis.com/maps/api/geocode/json?address=Somerset,%20Kuala%20Lumpur,%20Malaysia&sensor=false');
 		// The promise gets resolved with the full http response, including headers, etc.
 		httpPromise.then(function(fullResponse){
 			console.debug(fullResponse);
@@ -26,7 +25,7 @@ angular.module('deferredApp')
 			console.error('In error callback of new promise', err);
 		});
 
-		// // Rejecting new promise
+		// Rejecting new promise
 		// var rejectingPromise = httpPromise.then(function(fullResponse){
 		// }, function(err){
 		// 	console.error('In second then', err); 
@@ -36,11 +35,30 @@ angular.module('deferredApp')
 		// 		reason: err
 		// 	}
 		// });
-		// // Maybe surprisingly, if we return something in the previous error callback, 
-		// // the new promise is _resolved_ with that return value
-		// modifiedDataPromise.then(function(data){
+		// // Rejected promise
+		// rejectingPromise.then(function(data){
 		// 	console.debug('In success callback of new promise', data);
 		// }, function(err){
 		// 	console.error('In error callback of new promise', err);
+		// });
+
+		// // Which means that we can make a rejection into a resolve and vice-versa
+		// var doesntExistPromise = $http.get('http://maps.googleapis.com/maps/api/geocode/json?address=SomeplaceThatDoesntExist&sensor=false');
+		// var rejectingResolvedPromise = doesntExistPromise.then(function(fullResponse){
+		// 	// Response is successful, but without results, we want to reject this promise
+		// 	if(fullResponse.data.results.length == 0)
+		// 	throw {
+		// 		success: false,
+		// 		reason: 'No results'
+		// 	}
+		// }, function(err){
+		// 	// $http didn't fail so no error
+		// });
+		// // Rejected promise
+		// rejectingResolvedPromise.then(function(data){
+		// 	// Though previous promise was successful, this one isn't
+		// }, function(err){
+		// 	console.error(err);
+		// 	$scope.betterAddress = 'No results, sorry';
 		// });
 	});
