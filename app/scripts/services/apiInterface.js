@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('deferredApp')
-	.factory('apiInterface', function () {
+	.factory('apiInterface', function ($http) {
 		// Public API here
 		return {
 			loadPack: function () {
