@@ -14,11 +14,15 @@ angular.module('deferredApp')
 			loadingGPlusFeed.resolve('Google+ loaded');
 		}, Math.random() * 5000 );
 		loadingTwitterFeed.promise.then(function(res){
+			console.debug(res);
 			$scope.twitter = res;
 		});
 		loadingGPlusFeed.promise.then(function(res){
+			console.debug(res);
 			$scope.gplus = res;
 		});
+		// These 2 console.debug will be in random order
+		// The one below however will _always_ come after
 
 		// Guaranteed to only display after both have been loaded
 		var bothPromise = $q.all([loadingTwitterFeed.promise, loadingGPlusFeed.promise]);
