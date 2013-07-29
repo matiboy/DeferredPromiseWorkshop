@@ -11,6 +11,10 @@ angular.module('deferredApp', [])
         templateUrl: 'views/cleanHttp.html',
         controller: 'CleanHttpCtrl'
       })
+      .when('/listGenres', {
+        templateUrl: 'views/listGenres.html',
+        controller: 'ListGenresCtrl'
+      })
       .otherwise({
         redirectTo: '/'
       });
