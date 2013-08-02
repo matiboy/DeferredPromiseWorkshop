@@ -7,10 +7,6 @@ angular.module('deferredApp', [])
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
-      .when('/qThen', {
-        templateUrl: 'views/qThen.html',
-        controller: 'QThenCtrl'
-      })
       .otherwise({
         redirectTo: '/'
       });
