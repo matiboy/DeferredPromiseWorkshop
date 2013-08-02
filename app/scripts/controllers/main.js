@@ -19,17 +19,17 @@ angular.module('deferredApp')
 		manualDefer.resolve('Too late too');
 
 		// .then function can be called several times to add several callbacks to the promise's queue
-		// $scope.response = [];
+		// $scope.responses = [];
 		// var anotherDefer = $q.defer();
 		// anotherDefer.promise.then(function(resolvedWith){
 		// 	console.debug('First', resolvedWith);
-		// 	$scope.response.push('One callback');
+		// 	$scope.responses.push('One callback');
 		// }, function(){
 
 		// });
 		// anotherDefer.promise.then(function(resolvedWith){
 		// 	console.debug('Second', resolvedWith);
-		// 	$scope.response.push('Two callbacks');
+		// 	$scope.responses.push('Two callbacks');
 		// }, function(){
 
 		// });
